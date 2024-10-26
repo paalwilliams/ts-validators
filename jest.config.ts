@@ -1,14 +1,11 @@
-import {type Config} from 'jest'
+import { type Config } from "jest";
 
 const config: Config = {
-	injectGlobals: true,
+  injectGlobals: true,
 
-	transform: {
-		"\\.ts?$": "ts-jest", 
-	}
+  transform: {
+    "\\.ts?$": "ts-jest",
+  },
+};
 
-
-
-}
-
-export default config
+export default config;

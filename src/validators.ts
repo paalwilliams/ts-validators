@@ -4,23 +4,22 @@ export type TFunc = (...args: any[]) => any;
 export type TEmail = `${string}@${string}`;
 export type TColor = `#${string}`;
 
-
 // **** Variables **** //
 
-const EMAIL_RGX = /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i,
+const EMAIL_RGX =
+    /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i,
   COLOR_RGX = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-  ALPHA_NUMERIC = new RegExp('^[a-zA-Z0-9]*$');
-
+  ALPHA_NUMERIC = new RegExp("^[a-zA-Z0-9]*$");
 
 // **** Functions **** //
 
 // Nullables
-export const isUndef = ((arg: unknown): arg is undefined => arg === undefined);
-export const isNull = ((arg: unknown): arg is null => arg === null);
+export const isUndef = (arg: unknown): arg is undefined => arg === undefined;
+export const isNull = (arg: unknown): arg is null => arg === null;
 export const isNoU = orNul(isUndef);
 
 // Boolean
-export const isBool = checkType<boolean>('boolean');
+export const isBool = checkType<boolean>("boolean");
 export const isOptBool = orOpt(isBool);
 export const isNulBool = orNul(isBool);
 export const isOptNulBool = orNul(isOptBool);
@@ -30,7 +29,7 @@ export const isNulBoolArr = orNul(isBoolArr);
 export const isOptNulBoolArr = orNul(isOptBoolArr);
 
 // Number
-export const isNum = checkType<number>('number');
+export const isNum = checkType<number>("number");
 export const isOptNum = orOpt(isNum);
 export const isNulNum = orNul(isNum);
 export const isOptNulNum = orNul(isOptNum);
@@ -40,7 +39,7 @@ export const isNulNumArr = orNul(isNumArr);
 export const isOptNulNumArr = orNul(isOptNumArr);
 
 // String
-export const isStr = checkType<string>('string');
+export const isStr = checkType<string>("string");
 export const isOptStr = orOpt(isStr);
 export const isNulStr = orNul(isStr);
 export const isOptNulStr = orNul(isOptStr);
@@ -60,7 +59,7 @@ export const isNulDateArr = orNul(isDateArr);
 export const isOptNulDateArr = orNul(isOptDateArr);
 
 // Object
-export const isObj = checkType<object>('object');
+export const isObj = checkType<object>("object");
 export const isOptObj = orOpt(isObj);
 export const isNulObj = orNul(isObj);
 export const isOptNulObj = orNul(isOptObj);
@@ -70,7 +69,7 @@ export const isNulObjArr = orNul(isObjArr);
 export const isOptNulObjArr = orNul(isOptObjArr);
 
 // Function
-export const isFn = checkType<TFunc>('function');
+export const isFn = checkType<TFunc>("function");
 export const isOptFn = orOpt(isFn);
 export const isNulFn = orNul(isFn);
 export const isOptNulFn = orNul(isOptFn);
@@ -96,7 +95,6 @@ export const isAlphaNumStr = isRgx<string>(ALPHA_NUMERIC);
 export const isOptAlphaNumStr = orOpt(isAlphaNumStr);
 export const isNulAlphaNumStr = orNul(isAlphaNumStr);
 export const isOptNulAlphaNumStr = orNul(isOptAlphaNumStr);
-
 
 // **** Array Content **** //
 
@@ -131,17 +129,16 @@ export function isOptOrInArr<T extends readonly unknown[]>(
   };
 }
 
-
 // **** Enums **** //
 
 /**
  * Check is value satisfies enum.
  */
-export function isEnumVal<T>(arg: T): ((arg: unknown) => arg is T) {
+export function isEnumVal<T>(arg: T): (arg: unknown) => arg is T {
   const vals = _getEnumVals(arg);
   return (arg: unknown): arg is T => {
-    return vals.some(val => arg === val);
-  }
+    return vals.some((val) => arg === val);
+  };
 }
 
 /**
@@ -150,7 +147,7 @@ export function isEnumVal<T>(arg: T): ((arg: unknown) => arg is T) {
 function _getEnumVals(arg: unknown) {
   if (isNonArrObj(arg)) {
     const keys = _getEnumKeys(arg);
-    return keys.map(key => arg[key]);
+    return keys.map((key) => arg[key]);
   }
   throw Error('"getEnumVals" be an non-array object');
 }
@@ -170,13 +167,12 @@ export function _getEnumKeys(arg: unknown): string[] {
   throw Error('"getEnumKeys" be an non-array object');
 }
 
-
 // **** Misc **** //
 
 /**
  * Extract null/undefined from a validator function.
  */
-export function nonNullable<T>(cb: ((arg: unknown) => arg is T)) {
+export function nonNullable<T>(cb: (arg: unknown) => arg is T) {
   return (arg: unknown): arg is NonNullable<T> => {
     if (isNoU(arg)) {
       return false;
@@ -189,10 +185,8 @@ export function nonNullable<T>(cb: ((arg: unknown) => arg is T)) {
 /**
  * Check if non object array.
  */
-export function isNonArrObj(
-  arg: unknown,
-): arg is Record<string, unknown> {
-  return typeof arg === 'object' && !Array.isArray(arg);
+export function isNonArrObj(arg: unknown): arg is Record<string, unknown> {
+  return typeof arg === "object" && !Array.isArray(arg);
 }
 
 /**
@@ -212,14 +206,13 @@ export function checkObjEntries(
   return true;
 }
 
-
 // **** Wrapper Functions **** //
 
 /**
  * Allow param to be undefined
  */
-function orOpt<T>(cb: ((arg: unknown) => arg is T)) {
-  return (arg: unknown): arg is (T | undefined) => {
+function orOpt<T>(cb: (arg: unknown) => arg is T) {
+  return (arg: unknown): arg is T | undefined => {
     if (isUndef(arg)) {
       return true;
     } else {
@@ -231,8 +224,8 @@ function orOpt<T>(cb: ((arg: unknown) => arg is T)) {
 /**
  * Allow param to be undefined
  */
-function orNul<T>(cb: ((arg: unknown) => arg is T)) {
-  return (arg: unknown): arg is (T | null) => {
+function orNul<T>(cb: (arg: unknown) => arg is T) {
+  return (arg: unknown): arg is T | null => {
     if (arg === null) {
       return true;
     } else {
@@ -244,20 +237,20 @@ function orNul<T>(cb: ((arg: unknown) => arg is T)) {
 /**
  * Check array counterpart for validator item.
  */
-function isArr<T>(cb: ((arg: unknown) => arg is T)) {
+function isArr<T>(cb: (arg: unknown) => arg is T) {
   return (arg: unknown): arg is T[] => {
-    return Array.isArray(arg) && !arg.some(item => !cb(item));
+    return Array.isArray(arg) && !arg.some((item) => !cb(item));
   };
 }
 
 /**
- * See if a string satisfies the regex. NOTE: this lets an empty string be a 
+ * See if a string satisfies the regex. NOTE: this lets an empty string be a
  * valid value.
  */
 function isRgx<T>(rgx: RegExp) {
   return (arg: unknown): arg is T => {
-    return (isStr(arg) && (arg === '' || rgx.test(arg)));
-  }
+    return isStr(arg) && (arg === "" || rgx.test(arg));
+  };
 }
 
 /**
@@ -265,6 +258,6 @@ function isRgx<T>(rgx: RegExp) {
  */
 function checkType<T>(type: string) {
   return (arg: unknown): arg is T => {
-    return typeof arg === type && (type === 'object' ? (arg !== null) : true);
-  }
+    return typeof arg === type && (type === "object" ? arg !== null : true);
+  };
 }
